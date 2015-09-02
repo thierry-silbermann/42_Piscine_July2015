@@ -1,0 +1,285 @@
+// Ex 01
+
+ // ft_create_element.c
+
+#include "ft_list.h"
+#include <stdlib.h>
+
+t_list	*ft_create_elem(void *data)
+{
+	t_list	*list;
+
+	list = NULL;
+	list = malloc(sizeof(t_list));
+	if (list)
+	{
+		list->data = data;
+		list->next = NULL;
+	}
+	return (list);
+}
+
+ // ft_list.h
+
+#ifndef	__FT_LIST_H__
+# define __FT_LIST_H__
+
+typedef struct		s_list
+{
+	struct s_list	*next;
+	void			*data;
+}					t_list;
+
+#endif
+
+
+// Ex01
+
+ // ft_list.h
+
+#ifndef	__FT_LIST_H__
+# define __FT_LIST_H__
+
+typedef struct		s_list
+{
+	struct s_list	*next;
+	void			*data;
+}					t_list;
+
+t_list	*ft_create_elem(void *data);
+
+#endif
+
+ // ft_list_push_back.c
+
+#include "ft_list.h"
+
+void	ft_list_push_back(t_list **begin_list, void *data)
+{
+	t_list	*list;
+
+	list = *begin_list;
+	if (list)
+	{
+		while (list->next)
+			list = list->next;
+		list->next = ft_create_elem(data);
+	}
+	else
+		*begin_list = ft_create_elem(data);
+}
+
+// Ex02
+
+#include "ft_list.h"
+
+void	ft_list_push_front(t_list **begin_list, void *data)
+{
+	t_list	*list;
+
+	if (*begin_list)
+	{
+		list = ft_create_elem(data);
+		list->next = *begin_list;
+		*begin_list = list;
+	}
+	else
+		*begin_list = ft_create_elem(data);
+}
+
+// Ex 03
+
+#include "ft_list.h"
+
+int	ft_list_size(t_list *begin_list)
+{
+	t_list	*list;
+	int		i;
+
+	i = 0;
+	list = begin_list;
+	while (list)
+	{
+		i++;
+		list = list->next;
+	}
+	return (i);
+}
+
+// Ex 04
+
+#include "ft_list.h"
+
+t_list	*ft_list_last(t_list *begin_list)
+{
+	t_list	*list;
+
+	list = begin_list;
+	if (list)
+	{
+		while (list->next)
+			list = list->next;
+		return (list);
+	}
+	return (NULL);
+}
+
+// Ex 05
+
+#include <stdlib.h>
+#include "ft_list.h"
+
+t_list	*add_link(t_list *list, void *data)
+{
+	t_list *tmp;
+
+	tmp = malloc(sizeof(t_list));
+	if (tmp)
+	{
+		tmp->data = data;
+		tmp->next = list;
+	}
+	return (tmp);
+}
+
+t_list	*ft_list_push_params(int ac, char **av)
+{
+	t_list	*list;
+	int		i;
+
+	i = 2;
+	if (ac == 1)
+		return (NULL);
+	list = ft_create_elem(av[1]);
+	while (i < ac)
+	{
+		list = add_link(list, av[i]);
+		i++;
+	}
+	return (list);
+}
+
+// Ex 06
+
+#include <stdlib.h>
+#include "ft_list.h"
+
+void	ft_list_clear(t_list **begin_list)
+{
+	t_list	*tmp;
+	t_list	*list;
+
+	list = *begin_list;
+	tmp = NULL;
+	while (list)
+	{
+		if (list->next)
+			tmp = list->next;
+		else
+			tmp = NULL;
+		free(list);
+		list = tmp;
+	}
+}
+
+// Ex 07
+
+#include "ft_list.h"
+
+t_list *ft_list_at(t_list *begin_list, unsigned int nbr)
+{
+	t_list			*list;
+	unsigned int	i;
+
+	i = 1;
+	list = begin_list;
+	while (i < nbr)
+	{
+		if (!list)
+			return (NULL);
+		list = list->next;
+		i++;
+	}
+	return (list);
+}
+
+// Ex 08 
+
+#include "ft_list.h"
+
+void	ft_list_reverse(t_list **begin_list)
+{
+	t_list	*list;
+	t_list	*tmp;
+	t_list	*tmp2;
+
+	tmp = NULL;
+	list = *begin_list;
+	if (!list || !(list->next))
+		return;
+	tmp = list->next;
+	tmp2 = tmp->next;
+	list->next = NULL;
+	tmp->next = list;
+	while (tmp2)
+	{
+		list = tmp;
+		tmp = tmp2;
+		tmp2 = tmp2->next;
+		tmp->next = list;
+	}
+	*begin_list = tmp;
+}
+
+
+// Ex 09
+
+#include "ft_list.h"
+
+void	ft_list_foreach(t_list *begin_list, void (*f)(void *))
+{
+	t_list	*list_ptr;
+
+	list_ptr = begin_list;
+	while (list_ptr)
+	{
+		(*f)(list_ptr->data);
+		list_ptr = list_ptr->next;
+	}
+}
+
+// Ex 10 
+
+#include "ft_list.h"
+
+void	ft_list_foreach_if(t_list *begin_list, void (*f)(void *),
+			void *data_ref, int (*cmp)())
+{
+	t_list  *list_ptr;
+
+	list_ptr = begin_list;
+	while (list_ptr)
+	{
+		if ((*cmp)(list_ptr->data, data_ref) == 0)
+			(*f)(list_ptr->data);
+		list_ptr = list_ptr->next;
+	}
+}
+
+// Ex 11
+
+#include "ft_list.h"
+
+t_list	*ft_list_find(t_list *begin_list, void *data_ref, int (*cmp)())
+{
+	t_list  *list_ptr;
+
+	list_ptr = begin_list;
+	while (list_ptr)
+	{
+		if ((*cmp)(list_ptr->data, data_ref) == 0)
+			return (list_ptr);
+		list_ptr = list_ptr->next;
+	}
+	return (NULL);
+}

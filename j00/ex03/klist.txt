@@ -1,0 +1,5 @@
+Credentials cache: API:14087
+        Principal: tsilberm@42.FR
+
+  Issued                Expires             Flags    Principal
+Jul  7 12:55:59 2015  Jul 14 12:55:40 2015  FPIA   krbtgt/42.FR@42.FR
