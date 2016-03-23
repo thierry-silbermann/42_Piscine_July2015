@@ -37,17 +37,11 @@ void	alpha_mirror(char *str)
 	{
 		if (str[i] >= 'a' && str[i] <= 'z')
 		{
-			if (str[i] > 'm')
-				ft_putchar('m' - (str[i] - 'n'));
-			else if (str[i] < 'n')
-				ft_putchar('m' - (str[i] - 'n'));
+			ft_putchar('m' - (str[i] - 'n'));
 		}
 		else if (str[i] >= 'A' && str[i] <= 'Z')
 		{
-			if (str[i] > 'M')
-				ft_putchar('M' - (str[i] - 'N'));
-			else if (str[i] < 'N')
-				ft_putchar('M' - (str[i] - 'N'));
+			ft_putchar('M' - (str[i] - 'N'));
 		}
 		else
 			ft_putchar(str[i]);
